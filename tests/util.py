@@ -25,6 +25,7 @@ from builtins import *
 
 import json
 import os
+import responses
 import sys
 
 from .context import caliper, TESTDIR
@@ -184,3 +185,23 @@ def rebuild_endpoint_config(cfg_dict):
         return cfg
     except Exception as e:
         return TestError(e, cfg_dict)
+
+# sensor send functions for mocking out endopint
+
+def _send(fn, sensor, data):
+    with responses.RequestsMock() as resps:
+        resps.add(responses.POST, _TEST_ENDPOINT, status=201)
+        ids = fn(data)
+    return ids, sensor.statistics
+
+def sensor_config(sensor, data):
+    with responses.RequestsMock() as rsps:
+        rsps.add(responses.GET, _TEST_ENDPOINT, status=200, json=data)
+        cfg = sensor.get_config()
+    return cfg
+
+def sensor_describe(sensor, data):
+    return _send(sensor.describe, sensor, data)
+
+def sensor_send(sensor, data):
+    return _send(sensor.send, sensor, data)
