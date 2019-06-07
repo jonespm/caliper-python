@@ -37,7 +37,7 @@ import caliper.condensor as condensor
 # in the tests module's directory in a 'fixtures_common' subdirectory so
 # that the tests can find all the json fixture files in that sub-directory
 ###
-_FIXTURE_PREFIX = 'fixtures'
+_FIXTURE_PREFIX = os.path.join('caliper-spec', 'fixtures')
 _BROKEN_FIXTURE_SUFFIX = 'commonErrorFixtures'
 _FIXTURE_BASE_DIR = os.path.join(TESTDIR, _FIXTURE_PREFIX)
 _FIXTURE_COMMON_DIR = os.path.join(_FIXTURE_BASE_DIR, CALIPER_VERSION)
