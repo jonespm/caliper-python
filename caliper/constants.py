@@ -17,14 +17,11 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
-#
-from __future__ import (absolute_import, division, print_function, unicode_literals)
-from builtins import *
 
 # The line lengths in this file are long, but it's more legible as is
+# flake8 style checking ignored for this file, signal to dispable yapf as well
 # yapf: disable
 
-## Caliper constants
 CALIPER_VERSION = 'v1p2'
 CALIPER_CORE_CONTEXT = 'http://purl.imsglobal.org/ctx/caliper/{}'.format(CALIPER_VERSION)
 _CALIPER_PROFILE_CTXTS = 'http://purl.imsglobal.org/ctx/caliper/' + CALIPER_VERSION + '/{}'

@@ -19,8 +19,6 @@ setuptools installed. This package also depends on several third-party packages:
 
 * aniso8601 -- (3-clause BSD licensed)
 
-* future -- (MIT licensed)
-
 * requests -- (Apache 2 licensed)
 
 * rfc3986 -- (Apache 2 licensed)
@@ -32,6 +30,8 @@ third-party packages in your local Python environment.
 
 In test, the `ims_global` package depends on these third-party packages not actually used within
 the package code itself:
+
+* flake8
 
 * pytest and pytest-cov
 

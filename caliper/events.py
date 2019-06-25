@@ -17,8 +17,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
-#
-from __future__ import (absolute_import, division, print_function, unicode_literals)
 
 from caliper.constants import CALIPER_ACTIONS, CALIPER_PROFILES
 from caliper.constants import ENTITY_TYPES
@@ -120,7 +118,7 @@ class MinimalEvent(BaseEvent):
         return self._get_prop('actor')
 
 
-# Derived Eventsa
+# Derived Events
 class AnnotationEvent(Event):
     def __init__(self, **kwargs):
         Event.__init__(self, **kwargs)

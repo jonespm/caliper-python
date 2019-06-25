@@ -17,16 +17,11 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
-#
-from __future__ import (absolute_import, division, print_function, unicode_literals)
-
-try:
-    from collections.abc import MutableSequence, MutableMapping
-except ImportError:
-    from collections import MutableSequence, MutableMapping
 
 import copy
 import importlib
+
+from collections.abc import MutableSequence, MutableMapping
 
 from caliper.base import is_valid_context, is_valid_datetime, is_valid_URI
 from caliper.constants import CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_TYPES, EVENT_TYPES

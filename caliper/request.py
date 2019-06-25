@@ -17,18 +17,12 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
-#
-from __future__ import (absolute_import, division, print_function, unicode_literals)
-from future.utils import raise_with_traceback
-
-try:
-    from collections.abc import MutableSequence
-except ImportError:
-    from collections import MutableSequence
 
 import copy
 import datetime
 import requests
+
+from collections.abc import MutableSequence
 
 from caliper.base import CaliperSerializable, HttpOptions
 from caliper.constants import CALIPER_CORE_CONTEXT
@@ -106,9 +100,8 @@ class EndpointConfig(CaliperSerializable):
 
     def ensure_compatibility(self):
         if CALIPER_CORE_CONTEXT not in self.caliper_supported_versions:
-            raise_with_traceback(
-                ValueError('No support for Caliper version {0} in endpoint: {1}'.format(
-                    CALIPER_CORE_CONTEXT, self.caliper_supported_versions)))
+            raise ValueError('No support for Caliper version {0} in endpoint: {1}'.format(
+                CALIPER_CORE_CONTEXT, self.caliper_supported_versions))
         return True
 
     @property
@@ -134,16 +127,13 @@ class EndpointConfig(CaliperSerializable):
 
 class EventStoreRequestor(object):
     def describe(self, caliper_entity_list=None, sensor_id=None, debug=False):
-        raise_with_traceback(
-            NotImplementedError('Instance must implement EventStoreRequester.describe()'))
+        raise NotImplementedError('Instance must implement EventStoreRequester.describe()')
 
     def get_config(self):
-        raise_with_traceback(
-            NotImplementedError('Instance must implement EventStoreRequester.get_config()'))
+        raise NotImplementedError('Instance must implement EventStoreRequester.get_config()')
 
     def send(self, caliper_event_list=None, described_objects=None, sensor_id=None, debug=False):
-        raise_with_traceback(
-            NotImplementedError('Instance must implement EventStoreRequester.send()'))
+        raise NotImplementedError('Instance must implement EventStoreRequester.send()')
 
     def _get_time(self):
         return datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + 'Z'
@@ -177,7 +167,7 @@ class HttpRequestor(EventStoreRequestor):
         if not options:
             self._options = HttpOptions()
         elif not (isinstance(options, HttpOptions)):
-            raise_with_traceback(TypeError('options must implement base.HttpOptions'))
+            raise TypeError('options must implement base.HttpOptions')
         else:
             self._options = options
 

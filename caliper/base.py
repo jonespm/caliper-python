@@ -18,26 +18,19 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
 
-from __future__ import (absolute_import, division, print_function, unicode_literals)
-from future.utils import raise_with_traceback
-from builtins import str
-
-try:
-    from collections.abc import MutableSequence, MutableMapping
-except ImportError:
-    from collections import MutableSequence, MutableMapping
-
-from collections import namedtuple
-
 import copy
 import hashlib
 import importlib
 import json
 import re
+import sys
 import warnings
 import uuid
+
 from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_time as aniso_parse_time,
                        parse_duration as aniso_parse_duration)
+from collections.abc import MutableSequence, MutableMapping, namedtuple
+
 from rfc3986 import api as rfc3986_api, validators as rfc3986_validators
 
 from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_CONTEXTS,
@@ -72,8 +65,7 @@ def is_valid_profile(p):
 def _suggest_profile(prf, ctxt, typ):
     if prf:
         if not is_valid_profile(prf):
-            raise_with_traceback(
-                ValueError('{0} not in the list of valid Caliper profiles.'.format(prf)))
+            raise ValueError('{0} not in the list of valid Caliper profiles.'.format(prf))
         else:
             return prf
     else:
@@ -194,12 +186,12 @@ def ensure_type(p, t, optional=False):
         if optional:
             return True
         else:
-            raise_with_traceback(TypeError('non-optional properties cannot be None'))
+            raise TypeError('non-optional properties cannot be None')
     if t is None:
-        raise_with_traceback(TypeError('for present properties, type cannot be None type'))
+        raise TypeError('for present properties, type cannot be None type')
     elif t is MutableMapping:
         if not isinstance(p, t):
-            raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
+            raise TypeError('property must be of type {0}'.format(str(t)))
         else:
             return True
     elif t and not ((isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
@@ -207,7 +199,7 @@ def ensure_type(p, t, optional=False):
                     (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
                     (isinstance(p, MutableMapping) and is_subtype(p.get('type', dict), t)) or
                     (isinstance(p, _get_type(t)))):
-        raise_with_traceback(TypeError('property must be of type {0}'.format(str(t))))
+        raise TypeError('property must be of type {0}'.format(str(t)))
     return True
 
 
@@ -224,7 +216,7 @@ def ensure_types(p, tl, optional=False):
     if ret:
         return ret
     else:
-        raise_with_traceback(TypeError(' or '.join(messages)))
+        raise TypeError(' or '.join(messages))
 
 
 def is_subtype(t1, t2):
@@ -272,7 +264,7 @@ class Options(object):
         if isinstance(new_key, str):
             self._config['API_KEY'] = new_key
         else:
-            raise_with_traceback(ValueError('new key value must be a string'))
+            raise ValueError('new key value must be a string')
 
     @property
     def AUTH_SCHEME(self):
@@ -283,7 +275,7 @@ class Options(object):
         if isinstance(new_scheme, str):
             self._config['AUTH_SCHEME'] = new_scheme
         else:
-            raise_with_traceback(ValueError('new key value must be a string'))
+            raise ValueError('new key value must be a string')
 
     @property
     def CONNECTION_REQUEST_TIMEOUT(self):
@@ -294,8 +286,7 @@ class Options(object):
         if int(new_timeout) >= 1000:
             self._config['CONNECTION_REQUEST_TIMEOUT'] = int(new_timeout)
         else:
-            raise_with_traceback(
-                ValueError('new timeout value must be at least 1000 milliseconds'))
+            raise ValueError('new timeout value must be at least 1000 milliseconds')
 
     @property
     def CONNECTION_TIMEOUT(self):
@@ -306,8 +297,7 @@ class Options(object):
         if int(new_timeout) >= 1000:
             self._config['CONNECTION_TIMEOUT'] = int(new_timeout)
         else:
-            raise_with_traceback(
-                ValueError('new timeout value must be at least 1000 milliseconds'))
+            raise ValueError('new timeout value must be at least 1000 milliseconds')
 
     @property
     def DEBUG(self):
@@ -349,8 +339,7 @@ class Options(object):
         if int(new_timeout) >= 1000:
             self._config['SOCKET_TIMEOUT'] = int(new_timeout)
         else:
-            raise_with_traceback(
-                ValueError('new timeout value must be at least 1000 milliseconds'))
+            raise ValueError('new timeout value must be at least 1000 milliseconds')
 
 
 # Cailper configuration for HTTP transport
@@ -410,7 +399,7 @@ class CaliperSerializable(object):
 
     def _update_props(self, k, v, req=False):
         if req and (v is None):
-            raise_with_traceback(ValueError('{0} must have a non-null value'.format(str(k))))
+            raise ValueError('{0} must have a non-null value'.format(str(k)))
         if k:
             self._props.update({k: v})
 
@@ -426,8 +415,7 @@ class CaliperSerializable(object):
                 typ_name = t.__name__
             else:
                 typ_name = str(t)
-            raise_with_traceback(
-                ValueError('{0} must be a {1}; got {2} instead'.format(str(k), typ_name, v)))
+            raise ValueError('{0} must be a {1}; got {2} instead'.format(str(k), typ_name, v))
         self._update_props(k, v, req=req)
 
     def _set_bool_prop(self, k, v, req=False):
@@ -467,30 +455,29 @@ class CaliperSerializable(object):
     def _set_id(self, v):
         if self.type in ENTITY_TYPES.values():
             if not is_valid_URI(v):
-                raise_with_traceback(ValueError('Entity ID must be a valid URI'))
+                raise ValueError('Entity ID must be a valid URI')
             self._update_props('id', v, req=True)
         elif self.type in EVENT_TYPES.values():
             if v and not is_valid_UUID_URN(v):
-                raise_with_traceback(ValueError('Event ID must be a valid UUID URN'))
+                raise ValueError('Event ID must be a valid UUID URN')
             self._update_props('id', v or 'urn:uuid:{}'.format(uuid.uuid4()), req=True)
         else:
-            raise_with_traceback(
-                ValueError('Caliper Serializable of undeterminable type: {}'.format(self.type)))
+            raise ValueError('Caliper Serializable of undeterminable type: {}'.format(self.type))
 
     def _set_datetime_prop(self, k, v, req=False):
         if v and not is_valid_datetime(v):
-            raise_with_traceback(ValueError('{0} must be a valid date-time'.format(str(k))))
+            raise ValueError('{0} must be a valid date-time'.format(str(k)))
         self._update_props(k, v, req=req)
 
     def _set_duration_prop(self, k, v, req=False):
         if v and not is_valid_duration(v):
-            raise_with_traceback(ValueError('{0} must be a valid duration'.format(str(k))))
+            raise ValueError('{0} must be a valid duration'.format(str(k)))
         self._update_props(k, v, req=req)
 
     def _set_list_prop(self, k, v, t=None, req=False):
         if v:
             if not (isinstance(v, MutableSequence)):
-                raise_with_traceback(ValueError('{0} must be a list'.format(str(k))))
+                raise ValueError('{0} must be a list'.format(str(k)))
             elif t:
                 if isinstance(t, MutableSequence):
                     fn = ensure_list_types
@@ -501,24 +488,21 @@ class CaliperSerializable(object):
 
     def _set_obj_prop(self, k, v, t=None, req=False):
         if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
-            raise_with_traceback(
-                TypeError('Provided property is not of required type: {}'.format(t)))
+            raise TypeError('Provided property is not of required type: {}'.format(t))
         if isinstance(v, str) and not is_valid_URI(v):
-            raise_with_traceback(
-                ValueError('ID value for object property must be valid URI: {}'.format(v)))
+            raise ValueError('ID value for object property must be valid URI: {}'.format(v))
         if isinstance(v, str) and t and not (is_subtype(t, CaliperSerializable)):
-            raise_with_traceback(
-                ValueError('URI IDs can only be provided for objects of known Caliper types'))
+            raise ValueError('URI IDs can only be provided for objects of known Caliper types')
         self._update_props(k, v, req=req)
 
     def _set_time_prop(self, k, v, req=False):
         if v and not is_valid_time(v):
-            raise_with_traceback(ValueError('{0} must be a valid time'.format(str(k))))
+            raise ValueError('{0} must be a valid time'.format(str(k)))
         self._update_props(k, v, req=req)
 
     def _set_uri_prop(self, k, v, req=False):
         if v and not is_valid_URI(v):
-            raise_with_traceback(ValueError('{0} must be a valid URI'.format(str(k))))
+            raise ValueError('{0} must be a valid URI'.format(str(k)))
         self._update_props(k, v, req=req)
 
     # protected unpacker methods, used by dict and json-string representation
@@ -642,9 +626,8 @@ class BaseEvent(CaliperSerializable):
         self._set_id(id)
 
         if action not in CALIPER_PROFILE_ACTIONS[self.profile][self.type]:
-            raise_with_traceback(
-                ValueError('invalid action for profile and event: {} for {}:{}'.format(
-                    action, self.profile, self.type)))
+            raise ValueError('invalid action for profile and event: {} for {}:{}'.format(
+                action, self.profile, self.type))
         self._set_str_prop('action', action, req=True)
         self._set_datetime_prop('eventTime', eventTime, req=True)
         self._set_obj_prop('object', object, t=BaseEntity)

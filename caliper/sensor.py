@@ -17,15 +17,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
-#
-from __future__ import (absolute_import, division, print_function, unicode_literals)
-from future.utils import raise_with_traceback
-from builtins import str
 
-try:
-    from collections.abc import MutableSequence
-except ImportError:
-    from collections import MutableSequence
+from collections.abc import MutableSequence
 
 from caliper.base import CaliperSerializable, Options, HttpOptions, deprecation, ensure_list_type
 from caliper.entities import Entity
@@ -43,16 +36,16 @@ class Client(object):
             config_options = Options()
 
         if config_options and not (isinstance(config_options, Options)):
-            raise_with_traceback(TypeError('config_options must implement base.Options'))
+            raise TypeError('config_options must implement base.Options')
         self._config = config_options
 
         if requestor and not (isinstance(requestor, EventStoreRequestor)):
-            raise_with_traceback(TypeError('requestor must implement request.EventStoreRequestor'))
+            raise TypeError('requestor must implement request.EventStoreRequestor')
         else:
             self._requestor = HttpRequestor(options=self._config)
 
         if stats and not (isinstance(stats, Statistics)):
-            raise_with_traceback(TypeError('stats must implement stats.Stats'))
+            raise TypeError('stats must implement stats.Stats')
         else:
             self._stats = Statistics()
 
@@ -120,7 +113,7 @@ class SimpleSensor(object):
         if not config_options:
             self._config = HttpOptions(optimize_serialization=True)
         elif not (isinstance(config_options, HttpOptions)):
-            raise_with_traceback(TypeError('config_options must implement HttpOptions'))
+            raise TypeError('config_options must implement HttpOptions')
         else:
             self._config = config_options
         self._id = sensor_id
@@ -207,7 +200,7 @@ class Sensor(object):
     @staticmethod
     def fashion_default_sensor_with_client(client=None, sensor_id=None):
         if not (isinstance(client, Client)):
-            raise_with_traceback(TypeError('client must implement Client'))
+            raise TypeError('client must implement Client')
         s = Sensor(sensor_id=sensor_id)
         s.register_client('default', client)
         return s
@@ -215,7 +208,7 @@ class Sensor(object):
     @staticmethod
     def fashion_sensor_with_config(config_options=None, sensor_id=None):
         if not (isinstance(config_options, HttpOptions)):
-            raise_with_traceback(TypeError('config_options must implement HttpOptions'))
+            raise TypeError('config_options must implement HttpOptions')
         s = Sensor(sensor_id=sensor_id)
         s.register_client('default', Client(config_options=config_options))
         return s
@@ -274,11 +267,10 @@ class Sensor(object):
 
     def register_client(self, key, client):
         if not (isinstance(client, Client)):
-            raise_with_traceback(TypeError('client must implement Client'))
+            raise TypeError('client must implement Client')
 
         if not (isinstance(key, str)):
-            raise_with_traceback(
-                ValueError('key must be a string to use as a client registration key'))
+            raise ValueError('key must be a string to use as a client registration key')
 
         self._clients.update({key: client})
 

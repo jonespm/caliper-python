@@ -17,15 +17,8 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program. If not, see http://www.gnu.org/licenses/.
-#
-from __future__ import (absolute_import, division, print_function, unicode_literals)
-from future.utils import raise_with_traceback
-from builtins import str
 
-try:
-    from collections.abc import MutableSequence
-except ImportError:
-    from collections import MutableSequence
+from collections.abc import MutableSequence
 
 from caliper.constants import ENTITY_TYPES
 from caliper.constants import (CALIPER_LTI_MESSAGES, CALIPER_METRICS, CALIPER_ROLES,
@@ -104,8 +97,7 @@ class SystemIdentifier(BaseEntity):
         self._set_dict_prop('extensions', extensions)
 
         if identifierType not in CALIPER_SYSIDTYPES.values():
-            raise_with_traceback(
-                ValueError('identifierType must be in the list of valid system identifier types'))
+            raise ValueError('identifierType must be in the list of valid system identifier types')
         else:
             self._set_str_prop('identifierType', identifierType, req=True)
 
@@ -149,14 +141,14 @@ class Membership(Entity):
             if set(roles).issubset(set(CALIPER_ROLES.values())):
                 self._set_list_prop('roles', roles)
             else:
-                raise_with_traceback(ValueError('roles must be in the list of valid Role values'))
+                raise ValueError('roles must be in the list of valid Role values')
         elif roles:
-            raise_with_traceback(ValueError('roles must be a list of valid Roles values'))
+            raise ValueError('roles must be a list of valid Roles values')
         else:
             self._set_list_prop('roles', None)
 
         if status not in CALIPER_STATUS.values():
-            raise_with_traceback(ValueError('status must be in the list of valid Status values'))
+            raise ValueError('status must be in the list of valid Status values')
         else:
             self._set_str_prop('status', status, req=True)
 
@@ -282,7 +274,7 @@ class AggregateMeasure(Entity):
         self._set_float_prop('maxMetricValue', maxMetricValue)
 
         if metric not in CALIPER_METRICS.values():
-            raise_with_traceback(ValueError('metric must be in the list of valid Metric values'))
+            raise ValueError('metric must be in the list of valid Metric values')
         else:
             self._set_str_prop('metric', metric)
 
@@ -410,8 +402,7 @@ class LtiLink(DigitalResource):
         DigitalResource.__init__(self, **kwargs)
 
         if messageType and messageType not in CALIPER_LTI_MESSAGES.values():
-            raise_with_traceback(
-                ValueError('LTI message type must be in list of valid message types'))
+            raise ValueError('LTI message type must be in list of valid message types')
         else:
             self._set_str_prop('messageType', messageType)
 
