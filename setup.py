@@ -6,7 +6,7 @@ from setuptools import setup
 from os import path
 
 _packages = ['caliper', 'caliper.util']
-_test_requirements = ['pytest', 'pytest-cov', 'responses', 'tox']
+_test_requirements = ['flake8', 'pytest', 'pytest-cov', 'responses', 'tox']
 
 here = path.abspath(path.dirname(__file__))
 
