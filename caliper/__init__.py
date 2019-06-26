@@ -26,15 +26,13 @@ Caliper-compliant sensor or endpoint for you learning services.
 
 :license: See NOTICE for license details.
 """
-import logging
-
 from caliper.base import HttpOptions
 from caliper.constants import CALIPER_VERSION
 from caliper.sensor import Sensor, SimpleSensor
 
-__title__ = 'imsglobal_caliper'
-__version__ = '1.2.0.0'
-__build__ = 0x01020000
+__title__ = 'IMSGlobal_Caliper'
+__version__ = '1.3.0.0'
+__build__ = 0x01030000
 __author__ = 'IMS Global Learning Consortium, Inc.'
 __license__ = 'LGPLv3'
 __all__ = ['Sensor', 'SimpleSensor', 'HttpOptions', CALIPER_VERSION]
@@ -57,8 +55,3 @@ def build_sensor_from_config(config_options=None, sensor_id=None):
 
 def build_simple_sensor(config_options=None, sensor_id=None):
     return SimpleSensor.fashion_simple_sensor(config_options=config_options, sensor_id=sensor_id)
-
-
-# set default logging handler to avoid "No handler found" warnings.
-# Thanks to Kenneth Reitz' requests library for this pattern
-logger = logging.getLogger(__name__).addHandler(logging.NullHandler())

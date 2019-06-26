@@ -1,34 +1,23 @@
 #!/usr/bin/env python3
-"""
-distutils/setuptools install script.
-"""
-
-import os
 import re
-import sys
+
 from io import open
-
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
-
-if sys.argv[-1] == 'publish':
-    os.system('python setup.py sdist upload')
-    sys.exit()
+from setuptools import setup
+from os import path
 
 _packages = ['caliper', 'caliper.util']
 _test_requirements = ['pytest', 'pytest-cov', 'responses', 'tox']
 
-with open('requirements.txt', mode='r', encoding='utf-8') as fd:
+here = path.abspath(path.dirname(__file__))
+
+with open(path.join(here, 'requirements.txt'), encoding='utf-8') as fd:
     _install_requirements = fd.read().splitlines()
 
-with open('README.md', mode='r', encoding='utf-8') as f:
-    _readme = f.read()
-
+with open(path.join(here, 'README.md'), encoding='utf-8') as fd:
+    _readme = fd.read()
 
 def _get_val_from_mod(k):
-    with open('caliper/__init__.py', mode='r', encoding='utf-8') as fd:
+    with open(path.join(here, 'caliper', '__init__.py'), encoding='utf-8') as fd:
         return re.search(r'^__{0}__\s*=\s*[\'"]([^\'"]*)[\'"]'.format(k), fd.read(),
                          re.MULTILINE).group(1)
 
@@ -43,20 +32,28 @@ setup(
     version=_version,
     description='Caliper API for Python. Provides implementation for the IMS Caliper Sensor API.',
     long_description=_readme + '\n\n',
-    maintainer=_author,
-    maintainer_email='info@imsglobal.org',
+    long_description_content_type='text/markdown',
     url='https://github.com/IMSGlobal/caliper-python',
-    packages=_packages,
-    install_requires=_install_requirements,
-    tests_require=_test_requirements,
-    license=_license,
-    zip_safe=False,
+    author=_author,
+    author_email='info@imsglobal.org',
     classifiers=[
-        'Development Status :: 3 - Beta', 'Intended Audience :: Developers',
-        'Natural Language :: English',
+        'Development Status :: 3 - Beta',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Education',
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
-        'Programming Language :: Python', 'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7', 'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: Implementation :: PyPy'
-    ])
+        'Natural Language :: English',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.7'
+    ],
+    packages=_packages,
+    python_requires='>=3',
+    install_requires=_install_requirements,
+    extras_require={
+        'dev': _test_requirements,
+        'test': _test_requirements
+    },
+    project_urls={
+        'Homepage': 'https://www.imsglobal.org/activity/caliper',
+        'Source': 'https://github.com/IMSGlobal/caliper-python',
+        'Tracker': 'https://github.com/IMSGlobal/caliper-python/issues'
+    })
