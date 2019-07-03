@@ -29,7 +29,8 @@ import uuid
 
 from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_time as aniso_parse_time,
                        parse_duration as aniso_parse_duration)
-from collections.abc import MutableSequence, MutableMapping, namedtuple
+from collections.abc import MutableSequence, MutableMapping
+from collections import namedtuple
 
 from rfc3986 import api as rfc3986_api, validators as rfc3986_validators
 
