@@ -177,7 +177,7 @@ def ensure_list_types(l, tl):
     if ret:
         return ret
     else:
-        raise_with_traceback(TypeError(' or '.join(messages)))
+        raise TypeError(' or '.join(messages))
 
 
 def ensure_type(p, t, optional=False):
@@ -231,8 +231,8 @@ def _get_type(t):
         m, c = CALIPER_CLASSES.get(t, '.').rsplit('.', 1)
     try:
         return getattr(importlib.import_module(m), c)
-    except (ImportError, ValueError):
-        raise_with_traceback(ValueError('Unknown type: {0}'.format(str(t))))
+    except (ImportError, ValueError) as e:
+        raise ValueError('Unknown type: {0}'.format(str(t))) from e
 
 
 # Basic Caliper configuration object
@@ -441,7 +441,7 @@ class CaliperSerializable(object):
         elif is_valid_context(v, expected_base_context):
             self._update_props('@context', v, req=True)
         else:
-            raise_with_traceback(ValueError('Invalid context value: {}'.format(str(v))))
+            raise ValueError('Invalid context value: {}'.format(str(v)))
         self._update_context_hashes(self.context, _get_base_context(self.context))
 
     def _set_profile(self, profile=None, context=None, typename=None):
