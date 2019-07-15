@@ -45,7 +45,6 @@ class Event(BaseEvent):
                  membership=None,
                  referrer=None,
                  session=None,
-                 sourcedId=None,
                  target=None):
         BaseEvent.__init__(self,
                            context=context,
@@ -95,6 +94,10 @@ class Event(BaseEvent):
     @property
     def group(self):
         return self._get_prop('group')
+
+    @property
+    def membership(self):
+        return self._get_prop
 
     @property
     def referrer(self):
