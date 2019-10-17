@@ -164,7 +164,7 @@ CALIPER_TYPES_FOR_CLASSES = { CALIPER_CLASSES[key]:key for key in CALIPER_CLASSE
 
 CALIPER_LTI_MESSAGES = {
     'RESOURCE_LINK_REQUEST': 'LtiResourceLinkRequest',
-    'DEEP_LINKING_REQUEST': 'LtiDeepLinkingResponse',
+    'DEEP_LINKING_REQUEST': 'LtiDeepLinkingRequest',
     'DEEP_LINKING_RESPONSE': 'LtiDeepLinkingResponse',
 }
 
