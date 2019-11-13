@@ -389,7 +389,7 @@ class DigitalResourceCollection(DigitalResource, Collection):
 class Frame(DigitalResource):
     def __init__(self, index=None, **kwargs):
         DigitalResource.__init__(self, **kwargs)
-        self._set_int_prop('index', index, req=True)
+        self._set_int_prop('index', index)
 
     @property
     def index(self):
