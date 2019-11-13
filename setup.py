@@ -16,6 +16,7 @@ with open(path.join(here, 'requirements.txt'), encoding='utf-8') as fd:
 with open(path.join(here, 'README.md'), encoding='utf-8') as fd:
     _readme = fd.read()
 
+
 def _get_val_from_mod(k):
     with open(path.join(here, 'caliper', '__init__.py'), encoding='utf-8') as fd:
         return re.search(r'^__{0}__\s*=\s*[\'"]([^\'"]*)[\'"]'.format(k), fd.read(),
