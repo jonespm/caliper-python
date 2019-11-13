@@ -19,8 +19,6 @@
 # along with this program. If not, see http://www.gnu.org/licenses/.
 
 from __future__ import (absolute_import, division, print_function, unicode_literals)
-from future.standard_library import install_aliases
-install_aliases()
 from future.utils import raise_with_traceback
 from builtins import str
 

@@ -28,8 +28,6 @@ Caliper-compliant sensor or endpoint for you learning services.
 :license: See NOTICE for license details.
 """
 from __future__ import (absolute_import, division, print_function, unicode_literals)
-from future.standard_library import install_aliases
-install_aliases()
 
 import logging
 
