@@ -6,7 +6,7 @@ distutils/setuptools install script.
 import os
 import re
 import sys
-from codecs import open
+from io import open
 
 try:
     from setuptools import setup
@@ -20,15 +20,15 @@ if sys.argv[-1] == 'publish':
 _packages = ['caliper', 'caliper.util']
 _test_requirements = ['pytest', 'pytest-cov', 'responses', 'tox']
 
-with open('requirements.txt', 'r', 'utf-8') as fd:
+with open('requirements.txt', mode='r', encoding='utf-8') as fd:
     _install_requirements = fd.read().splitlines()
 
-with open('README.md', 'r', 'utf-8') as f:
+with open('README.md', mode='r', encoding='utf-8') as f:
     _readme = f.read()
 
 
 def _get_val_from_mod(k):
-    with open('caliper/__init__.py', 'r', 'utf-8') as fd:
+    with open('caliper/__init__.py', mode='r', encoding='utf-8') as fd:
         return re.search(r'^__{0}__\s*=\s*[\'"]([^\'"]*)[\'"]'.format(k), fd.read(),
                          re.MULTILINE).group(1)
 
