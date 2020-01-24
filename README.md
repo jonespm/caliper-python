@@ -47,7 +47,7 @@ steps to make it portably usbale with Python 2.7 as well (using the `future` pac
 the code base should ensure the tests run clean under Python 3.7, 2.7, PyPy, and PyPy3.
 
 Currently, merges into the ongoing `imsglobal_caliper` work get tested in Travis-CI (xenial-based
-build environment) against Python versions 2.7, 3.7, 3.8 (development version), PyPy, and PyPy3.
+build environment) against Python versions 3.7, 3.8 (development version), and PyPy3.
 
 
 ## Build and install
@@ -100,9 +100,9 @@ but we do not accept contributions in the form of pull requests from non-members
 `CONTRIBUTING.md` for more information.
 
 **Testing**. When you work with the source bundle, we include tests in the `tests` directory. In
-general, whenever you might make changes to code in `caliper`, you should run the fixture
-tests. From the source repo's top-level directory, use `tox` to run all the tests on Python 2.7,
-Python 3.7, PyPy, and PyPy3.
+general, whenever you might make changes to code in `caliper`, you should run the fixture tests.
+From the source repo's top-level directory, use `tox` to run all the tests on Python 3.7, 3.8
+(dev), and PyPy3.
 
 Before you can run the tests, you will also need a copy of the Caliper fixtures (see below).
 

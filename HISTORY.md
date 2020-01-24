@@ -10,6 +10,8 @@
 - Simplify implementation by removing marker types, LearningContext entity, as not in the Caliper
   specification.
 
+- Drops support for Python2
+
 
 ## 1.1.10
 
