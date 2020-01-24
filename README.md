@@ -218,5 +218,5 @@ This project is licensed under the terms of the GNU Lesser General Public Licens
 version 3. See the LICENSE file for details. For additional information on licensing options for
 IMS members, please see the NOTICE file.
 
-©2019 IMS Global Learning Consortium, Inc. All Rights Reserved.  Trademark Information -
+©2020 IMS Global Learning Consortium, Inc. All Rights Reserved.  Trademark Information -
 http://www.imsglobal.org/copyright.html
