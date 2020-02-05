@@ -12,6 +12,8 @@
 
 - Drops support for Python2
 
+- Corrects broken list of Caliper Roles for proper alignment with the 1.2 specification
+
 
 ## 1.1.10
 
