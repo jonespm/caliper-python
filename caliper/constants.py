@@ -164,19 +164,14 @@ CALIPER_LTI_MESSAGES = {
 }
 
 CALIPER_METRICS = {
-    'ACTIVITIES_COMPLETED': 'ActivitiesCompleted',
-    'ACTIVITIES_PASSED': 'ActivitiesPassed',
-    'ASSESSMENTS_COMPLETED': 'AssessmentsCompleted',
     'ASSESSMENTS_PASSED': 'AssessmentsPassed',
-    'DOCUMENTS_READ': 'DocumentsRead',
-    'LESSONS_COMPLETED': 'LessonsCompleted',
-    'LESSONS_PASSED': 'LessonsPassed',
+    'ASSESSMENTS_SUBMITTED': 'AssessmentsSubmitted',
     'MINUTES_ON_TASK': 'MinutesOnTask',
+    'SKILLS_MASTERED': 'SkillsMastered',
     'STANDARDS_MASTERED': 'StandardsMastered',
     'UNITS_COMPLETED': 'UnitsCompleted',
     'UNITS_PASSED': 'UnitsPassed',
-    'WORDS_READ': 'WordsRead',
-    'WORDS_WRITTEN': 'WordsWritten'
+    'WORDS_READ': 'WordsRead'
 }
 
 CALIPER_ROLES = {
