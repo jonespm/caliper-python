@@ -250,7 +250,7 @@ CALIPER_SYSIDTYPES = {
     'LTI_CONTEXT_ID': 'LtiContextId',
     'LTI_DEPLOYMENT_ID': 'LtiDeploymentId',
     'LTI_PLATFORM_ID': 'LtiPlatformId',
-    'LTI_TOOL_ID': 'LtiToolid',
+    'LTI_TOOL_ID': 'LtiToolId',
     'LTI_USERID': 'LtiUserId',
     'EMAIL_ADDRESS': 'EmailAddress',
     'ACCOUNT_USERNAME': 'AccountUserName',

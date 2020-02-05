@@ -12,8 +12,8 @@
 
 - Drops support for Python2
 
-- Corrects broken lists of Caliper Roles, Caliper Metrics for proper alignment with the 1.2
-  specification
+- Corrects broken lists of Caliper Roles, Caliper Metrics, Caliper System Identifier Types for
+  proper alignment with the 1.2 specification
 
 
 
