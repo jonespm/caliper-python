@@ -72,7 +72,7 @@ def _suggest_profile(prf, ctxt, typ):
         _general_profile = CALIPER_PROFILES['GENERAL']
         p_from_context = CALIPER_PROFILES_FOR_CONTEXTS.get(_get_base_context(ctxt),
                                                            _general_profile)
-        if p_from_context is not _general_profile:
+        if p_from_context != _general_profile:
             return p_from_context
         else:
             return CALIPER_PROFILES_FOR_EVENT_TYPES.get(typ, _general_profile)
