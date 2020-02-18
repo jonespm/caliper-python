@@ -1,29 +1,60 @@
-dist: xenial
 language: python
-python:
-  - "3.7"
-  - "3.8-dev"
-  - "pypy3"
-sudo: true
+
+stages:
+  - prechecks
+  - tests
+
+jobs:
+  include:
+    - stage: prechecks
+      python: 3.7
+      dist: xenial
+      sudo: true
+      env: TOXENV=flake8
+    - python: 3.5
+      env: TOXENV=py35
+    - python: 3.6
+      env: TOXENV=py36
+    - python: 3.7
+      env: TOXENV=py37
+      dist: xenial
+      sudo: true
+    - python: 3.8-dev
+      env: TOXENV=py38
+      dist: xenial
+      sudo: true
+    - python: pypy3
+      env: TOXENV=pypy3
 
 before_install:
-    # note that TRAVIS_BRANCH tells us the _target branch_ in PR builds;
-    # this is explicitly what we want
-    # don't bother building branches not destined for merging into develop or master
-    - echo "Current build type is $TRAVIS_BRANCH."
-    - echo "Current PR number is $TRAVIS_PULL_REQUEST."
-    - echo "(Only develop, master, and PR builds for develop and master, actually get built.)"
-    - if [[ "$TRAVIS_BRANCH" != "master" ]] && [[ "$TRAVIS_BRANCH" != "develop" ]] ; then travis_terminate 0 ; fi
+  - python --version
+  - uname -a
+  - lsb_release -a
+  # note that TRAVIS_BRANCH tells us the _target branch_ in PR builds;
+  # this is explicitly what we want
+  # don't bother building branches not destined for merging into develop or master
+  - echo "Current build type is $TRAVIS_BRANCH."
+  - echo "Current PR number is $TRAVIS_PULL_REQUEST."
+  - echo "(Only develop, master, and PR builds for develop and master, actually get built.)"
+  - if [[ "$TRAVIS_BRANCH" != "master" ]] && [[ "$TRAVIS_BRANCH" != "develop" ]] ; then travis_terminate 0 ; fi
 
 install:
-    - pip install tox
-    - pip check
+  - python -m pip install pip setuptools -U
+  - python -m pip install tox
+  - python -m virtualenv --version
+  - python -m easy_install --version
+  - python -m pip --version
+  - python -m tox --version
 
 before_script:
-    - wget https://github.com/IMSGlobal/caliper-spec/archive/develop.zip
-    - unzip develop.zip -d ./tests
-    - mv ./tests/caliper-spec-develop ./tests/caliper-spec
+  - wget https://github.com/IMSGlobal/caliper-spec/archive/develop.zip
+  - unzip develop.zip -d ./tests
+  - mv ./tests/caliper-spec-develop ./tests/caliper-spec
 
 script:
-    - python3 setup.py sdist
-    - tox
+  - python setup.py sdist
+  - python -m tox -e $TOXENV
+
+after_failure:
+  - more .tox/log/* | cat
+  - more .tox/*/log/* | cat
