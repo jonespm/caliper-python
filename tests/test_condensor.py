@@ -32,15 +32,15 @@ class TestCaliperCondensor(unittest.TestCase):
 
     # test an event
     def testBookmarkAnnotationEvent(self):
-        fixture = 'caliperEventAnnotationBookmarked'
+        fixture = "caliperEventAnnotationBookmarked"
         self.assertEqual(util.get_fixture(fixture), util.rebuild_event(fixture))
 
     # test an entity
     def testAssessment(self):
-        fixture = 'caliperEntityAssessment'
+        fixture = "caliperEntityAssessment"
         self.assertEqual(util.get_fixture(fixture), util.rebuild_entity(fixture))
 
     # test an envelope
     def testEnvelopeEventSingle(self):
-        fixture = 'caliperEnvelopeEventSingle'
+        fixture = "caliperEnvelopeEventSingle"
         self.assertEqual(util.get_fixture(fixture), util.rebuild_envelope(fixture))

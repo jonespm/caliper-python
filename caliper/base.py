@@ -26,30 +26,48 @@ import re
 import warnings
 import uuid
 
-from aniso8601 import (parse_datetime as aniso_parse_datetime, parse_time as aniso_parse_time,
-                       parse_duration as aniso_parse_duration)
+from aniso8601 import (
+    parse_datetime as aniso_parse_datetime,
+    parse_time as aniso_parse_time,
+    parse_duration as aniso_parse_duration,
+)
 from collections.abc import MutableSequence, MutableMapping
 from collections import namedtuple
 
 from rfc3986 import api as rfc3986_api, validators as rfc3986_validators
 
-from caliper.constants import (CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_CONTEXTS,
-                               CALIPER_PROFILES, CALIPER_PROFILES_FOR_CONTEXTS,
-                               CALIPER_PROFILES_FOR_EVENT_TYPES, CALIPER_PROFILE_ACTIONS,
-                               CALIPER_TYPES, CALIPER_TYPES_FOR_CLASSES, EVENT_TYPES, ENTITY_TYPES)
+from caliper.constants import (
+    CALIPER_CLASSES,
+    CALIPER_CORE_CONTEXT,
+    CALIPER_CONTEXTS,
+    CALIPER_PROFILES,
+    CALIPER_PROFILES_FOR_CONTEXTS,
+    CALIPER_PROFILES_FOR_EVENT_TYPES,
+    CALIPER_PROFILE_ACTIONS,
+    CALIPER_TYPES,
+    CALIPER_TYPES_FOR_CLASSES,
+    EVENT_TYPES,
+    ENTITY_TYPES,
+)
 
 # validation regexes
-_uri_validator = rfc3986_validators.Validator().require_presence_of('scheme', )
+_uri_validator = rfc3986_validators.Validator().require_presence_of("scheme",)
 
-_datetime_re = re.compile(r'\A{YYYY}-{MM}-{DD}T{HH}:{mm}:{ss}.{SSS}Z\Z'.format(YYYY='([0-9]{4})',
-                                                                               MM='([0-9]{2})',
-                                                                               DD='([0-9]{2})',
-                                                                               HH='([0-9]{2})',
-                                                                               mm='([0-9]{2})',
-                                                                               ss='([0-9]{2})',
-                                                                               SSS='([0-9]{3})'))
+_datetime_re = re.compile(
+    r"\A{YYYY}-{MM}-{DD}T{HH}:{mm}:{ss}.{SSS}Z\Z".format(
+        YYYY="([0-9]{4})",
+        MM="([0-9]{2})",
+        DD="([0-9]{2})",
+        HH="([0-9]{2})",
+        mm="([0-9]{2})",
+        ss="([0-9]{2})",
+        SSS="([0-9]{3})",
+    )
+)
 
-_uuid_urn_re = re.compile(r'\Aurn:uuid:[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}\Z')
+_uuid_urn_re = re.compile(
+    r"\Aurn:uuid:[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}\Z"
+)
 
 
 # deprecation convenience function
@@ -65,13 +83,16 @@ def is_valid_profile(p):
 def _suggest_profile(prf, ctxt, typ):
     if prf:
         if not is_valid_profile(prf):
-            raise ValueError('{0} not in the list of valid Caliper profiles.'.format(prf))
+            raise ValueError(
+                "{0} not in the list of valid Caliper profiles.".format(prf)
+            )
         else:
             return prf
     else:
-        _general_profile = CALIPER_PROFILES['GENERAL']
-        p_from_context = CALIPER_PROFILES_FOR_CONTEXTS.get(_get_base_context(ctxt),
-                                                           _general_profile)
+        _general_profile = CALIPER_PROFILES["GENERAL"]
+        p_from_context = CALIPER_PROFILES_FOR_CONTEXTS.get(
+            _get_base_context(ctxt), _general_profile
+        )
         if p_from_context != _general_profile:
             return p_from_context
         else:
@@ -79,14 +100,15 @@ def _suggest_profile(prf, ctxt, typ):
 
 
 # named tuple to make it easier to handle the context hashes for a Caliper object
-ContextHash = namedtuple('ContextHash', ['context', 'context_base'])
+ContextHash = namedtuple("ContextHash", ["context", "context_base"])
 
 
 # context handling functions
 def is_valid_context(ctxt, expected_base_context):
     base_context = _get_base_context(ctxt)
-    return (is_valid_URI(base_context)
-            and _is_valid_context_for_base(base_context, expected_base_context))
+    return is_valid_URI(base_context) and _is_valid_context_for_base(
+        base_context, expected_base_context
+    )
 
 
 def _get_base_context(ctxt):
@@ -101,7 +123,7 @@ def _get_base_context(ctxt):
 
 
 def _get_context_hash(ctxt):
-    return hashlib.md5(json.dumps(ctxt, sort_keys=True).encode('utf-8')).hexdigest()
+    return hashlib.md5(json.dumps(ctxt, sort_keys=True).encode("utf-8")).hexdigest()
 
 
 def _get_root_context_for_profile(p):
@@ -109,14 +131,15 @@ def _get_root_context_for_profile(p):
 
 
 def _is_valid_context_for_base(c1, c2):
-    return (c2 == c1
-            or (c2 == CALIPER_CORE_CONTEXT and c1 in CALIPER_PROFILES_FOR_CONTEXTS.keys()))
+    return c2 == c1 or (
+        c2 == CALIPER_CORE_CONTEXT and c1 in CALIPER_PROFILES_FOR_CONTEXTS.keys()
+    )
 
 
 # date and time validation
 def is_valid_datetime(dt):
     try:
-        assert (_datetime_re.match(dt))
+        assert _datetime_re.match(dt)
         aniso_parse_datetime(dt)
         return True
     except Exception:
@@ -150,7 +173,7 @@ def is_valid_URI(uri):
 
 def is_valid_UUID_URN(uri):
     try:
-        assert (_uuid_urn_re.match(uri))
+        assert _uuid_urn_re.match(uri)
         return True
     except Exception:
         return False
@@ -177,7 +200,7 @@ def ensure_list_types(l, tl):
     if ret:
         return ret
     else:
-        raise TypeError(' or '.join(messages))
+        raise TypeError(" or ".join(messages))
 
 
 def ensure_type(p, t, optional=False):
@@ -186,20 +209,22 @@ def ensure_type(p, t, optional=False):
         if optional:
             return True
         else:
-            raise TypeError('non-optional properties cannot be None')
+            raise TypeError("non-optional properties cannot be None")
     if t is None:
-        raise TypeError('for present properties, type cannot be None type')
+        raise TypeError("for present properties, type cannot be None type")
     elif t is MutableMapping:
         if not isinstance(p, t):
-            raise TypeError('property must be of type {0}'.format(str(t)))
+            raise TypeError("property must be of type {0}".format(str(t)))
         else:
             return True
-    elif t and not ((isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values()) or
-                    (isinstance(p, BaseEntity) and is_subtype(p.type, t)) or
-                    (isinstance(p, BaseEvent) and is_subtype(p.type, t)) or
-                    (isinstance(p, MutableMapping) and is_subtype(p.get('type', dict), t)) or
-                    (isinstance(p, _get_type(t)))):
-        raise TypeError('property must be of type {0}'.format(str(t)))
+    elif t and not (
+        (isinstance(p, str) and is_valid_URI(p) and t in CALIPER_TYPES.values())
+        or (isinstance(p, BaseEntity) and is_subtype(p.type, t))
+        or (isinstance(p, BaseEvent) and is_subtype(p.type, t))
+        or (isinstance(p, MutableMapping) and is_subtype(p.get("type", dict), t))
+        or (isinstance(p, _get_type(t)))
+    ):
+        raise TypeError("property must be of type {0}".format(str(t)))
     return True
 
 
@@ -216,7 +241,7 @@ def ensure_types(p, tl, optional=False):
     if ret:
         return ret
     else:
-        raise TypeError(' or '.join(messages))
+        raise TypeError(" or ".join(messages))
 
 
 def is_subtype(t1, t2):
@@ -224,136 +249,138 @@ def is_subtype(t1, t2):
 
 
 def _get_type(t):
-    m = c = ''
+    m = c = ""
     if t and isinstance(t, type):
         m, c = t.__module__, t.__name__
     elif t:
-        m, c = CALIPER_CLASSES.get(t, '.').rsplit('.', 1)
+        m, c = CALIPER_CLASSES.get(t, ".").rsplit(".", 1)
     try:
         return getattr(importlib.import_module(m), c)
     except (ImportError, ValueError) as e:
-        raise ValueError('Unknown type: {0}'.format(str(t))) from e
+        raise ValueError("Unknown type: {0}".format(str(t))) from e
 
 
 # Basic Caliper configuration object
 class Options(object):
 
     default_options = {
-        'API_KEY': '',
-        'AUTH_SCHEME': '',
-        'CONNECTION_REQUEST_TIMEOUT': 1000,
-        'CONNECTION_TIMEOUT': 1000,
-        'DEBUG': False,
-        'HOST': None,
-        'OPTIMIZE_SERIALIZATION': True,
-        'SOCKET_TIMEOUT': 1000,
+        "API_KEY": "",
+        "AUTH_SCHEME": "",
+        "CONNECTION_REQUEST_TIMEOUT": 1000,
+        "CONNECTION_TIMEOUT": 1000,
+        "DEBUG": False,
+        "HOST": None,
+        "OPTIMIZE_SERIALIZATION": True,
+        "SOCKET_TIMEOUT": 1000,
     }
 
     def __init__(self, opts=None):
         if opts is None:
             opts = {}
         self._config = self.default_options.copy()
-        self._config.update((k, opts[k]) for k in (set(opts.keys()) & set(self._config.keys())))
+        self._config.update(
+            (k, opts[k]) for k in (set(opts.keys()) & set(self._config.keys()))
+        )
 
     @property
     def API_KEY(self):
-        return self._config['API_KEY']
+        return self._config["API_KEY"]
 
     @API_KEY.setter
     def API_KEY(self, new_key):
         if isinstance(new_key, str):
-            self._config['API_KEY'] = new_key
+            self._config["API_KEY"] = new_key
         else:
-            raise ValueError('new key value must be a string')
+            raise ValueError("new key value must be a string")
 
     @property
     def AUTH_SCHEME(self):
-        return self._config['AUTH_SCHEME']
+        return self._config["AUTH_SCHEME"]
 
     @AUTH_SCHEME.setter
     def AUTH_SCHEME(self, new_scheme):
         if isinstance(new_scheme, str):
-            self._config['AUTH_SCHEME'] = new_scheme
+            self._config["AUTH_SCHEME"] = new_scheme
         else:
-            raise ValueError('new key value must be a string')
+            raise ValueError("new key value must be a string")
 
     @property
     def CONNECTION_REQUEST_TIMEOUT(self):
-        return self._config['CONNECTION_REQUEST_TIMEOUT']
+        return self._config["CONNECTION_REQUEST_TIMEOUT"]
 
     @CONNECTION_REQUEST_TIMEOUT.setter
     def CONNECTION_REQUEST_TIMEOUT(self, new_timeout):
         if int(new_timeout) >= 1000:
-            self._config['CONNECTION_REQUEST_TIMEOUT'] = int(new_timeout)
+            self._config["CONNECTION_REQUEST_TIMEOUT"] = int(new_timeout)
         else:
-            raise ValueError('new timeout value must be at least 1000 milliseconds')
+            raise ValueError("new timeout value must be at least 1000 milliseconds")
 
     @property
     def CONNECTION_TIMEOUT(self):
-        return self._config['CONNECTION_TIMEOUT']
+        return self._config["CONNECTION_TIMEOUT"]
 
     @CONNECTION_TIMEOUT.setter
     def CONNECTION_TIMEOUT(self, new_timeout):
         if int(new_timeout) >= 1000:
-            self._config['CONNECTION_TIMEOUT'] = int(new_timeout)
+            self._config["CONNECTION_TIMEOUT"] = int(new_timeout)
         else:
-            raise ValueError('new timeout value must be at least 1000 milliseconds')
+            raise ValueError("new timeout value must be at least 1000 milliseconds")
 
     @property
     def DEBUG(self):
-        return self._config['DEBUG']
+        return self._config["DEBUG"]
 
     @DEBUG.setter
     def DEBUG(self, new_debug):
         if new_debug:
-            self._config['DEBUG'] = True
+            self._config["DEBUG"] = True
         else:
-            self._config['DEBUG'] = False
+            self._config["DEBUG"] = False
 
     @property
     def HOST(self):
-        return self._config['HOST']
+        return self._config["HOST"]
 
     @HOST.setter
     def HOST(self, new_host):
         if is_valid_URI(new_host):
-            self._config['HOST'] = str(new_host)
+            self._config["HOST"] = str(new_host)
 
     @property
     def OPTIMIZE_SERIALIZATION(self):
-        return self._config['OPTIMIZE_SERIALIZATION']
+        return self._config["OPTIMIZE_SERIALIZATION"]
 
     @OPTIMIZE_SERIALIZATION.setter
     def OPTIMIZE_SERIALIZATION(self, optimize):
         if optimize:
-            self._config['OPTIMIZE_SERIALIZATION'] = True
+            self._config["OPTIMIZE_SERIALIZATION"] = True
         else:
-            self._config['OPTIMIZE_SERIALIZATION'] = False
+            self._config["OPTIMIZE_SERIALIZATION"] = False
 
     @property
     def SOCKET_TIMEOUT(self):
-        return self._config['SOCKET_TIMEOUT']
+        return self._config["SOCKET_TIMEOUT"]
 
     @SOCKET_TIMEOUT.setter
     def SOCKET_TIMEOUT(self, new_timeout):
         if int(new_timeout) >= 1000:
-            self._config['SOCKET_TIMEOUT'] = int(new_timeout)
+            self._config["SOCKET_TIMEOUT"] = int(new_timeout)
         else:
-            raise ValueError('new timeout value must be at least 1000 milliseconds')
+            raise ValueError("new timeout value must be at least 1000 milliseconds")
 
 
 # Cailper configuration for HTTP transport
 class HttpOptions(Options):
     def __init__(
-            self,
-            api_key='',
-            auth_scheme='',
-            connection_request_timeout=10000,
-            connection_timeout=10000,
-            debug=False,
-            host='http://httpbin.org/post',
-            optimize_serialization=True,
-            socket_timeout=10000,
+        self,
+        api_key="",
+        auth_scheme="",
+        connection_request_timeout=10000,
+        connection_timeout=10000,
+        debug=False,
+        host="http://httpbin.org/post",
+        optimize_serialization=True,
+        socket_timeout=10000,
     ):
         Options.__init__(self)
         self.API_KEY = api_key
@@ -367,7 +394,7 @@ class HttpOptions(Options):
 
     def get_auth_header_value(self):
         if self.AUTH_SCHEME:
-            return '{0} {1}'.format(self.AUTH_SCHEME, self.API_KEY)
+            return "{0} {1}".format(self.AUTH_SCHEME, self.API_KEY)
         else:
             return None
 
@@ -376,21 +403,21 @@ class HttpOptions(Options):
 class CaliperSerializable(object):
     def __init__(self):
         self._props = {}
-        self._classname = '.'.join([self.__class__.__module__, self.__class__.__name__])
+        self._classname = ".".join([self.__class__.__module__, self.__class__.__name__])
         self._context_hashes = ContextHash(None, None)
         self._default_profile = None
 
     @property
     def context(self):
-        return self._get_prop('@context')
+        return self._get_prop("@context")
 
     @property
     def profile(self):
-        return self._get_prop('profile') or self._default_profile
+        return self._get_prop("profile") or self._default_profile
 
     @property
     def type(self):
-        return self._get_prop('type')
+        return self._get_prop("type")
 
     # these methods are the only ones that directly touch the object's underlying
     # property/object cache
@@ -399,23 +426,27 @@ class CaliperSerializable(object):
 
     def _update_props(self, k, v, req=False):
         if req and (v is None):
-            raise ValueError('{0} must have a non-null value'.format(str(k)))
+            raise ValueError("{0} must have a non-null value".format(str(k)))
         if k:
             self._props.update({k: v})
 
     def _update_context_hashes(self, ctxt, ctxt_base):
-        self._context_hashes = ContextHash(_get_context_hash(ctxt), _get_context_hash(ctxt_base))
+        self._context_hashes = ContextHash(
+            _get_context_hash(ctxt), _get_context_hash(ctxt_base)
+        )
 
     # protected base-type setters that inheriting classes use internally to set
     # underlying state
 
     def _set_typed_prop(self, k, v, t, req=False):
         if not (v is None or isinstance(v, t)):
-            if hasattr(t, '__name__'):
+            if hasattr(t, "__name__"):
                 typ_name = t.__name__
             else:
                 typ_name = str(t)
-            raise ValueError('{0} must be a {1}; got {2} instead'.format(str(k), typ_name, v))
+            raise ValueError(
+                "{0} must be a {1}; got {2} instead".format(str(k), typ_name, v)
+            )
         self._update_props(k, v, req=req)
 
     def _set_bool_prop(self, k, v, req=False):
@@ -437,47 +468,49 @@ class CaliperSerializable(object):
     def _set_context(self, v, profile):
         expected_base_context = _get_root_context_for_profile(profile)
         if not v:
-            self._update_props('@context', expected_base_context, req=True)
+            self._update_props("@context", expected_base_context, req=True)
         elif is_valid_context(v, expected_base_context):
-            self._update_props('@context', v, req=True)
+            self._update_props("@context", v, req=True)
         else:
-            raise ValueError('Invalid context value: {}'.format(str(v)))
+            raise ValueError("Invalid context value: {}".format(str(v)))
         self._update_context_hashes(self.context, _get_base_context(self.context))
 
     def _set_profile(self, profile=None, context=None, typename=None):
         self._default_profile = _suggest_profile(profile, context, typename)
-        self._set_str_prop('profile', profile)
+        self._set_str_prop("profile", profile)
 
     def _set_type(self, default=None):
         self._typename = CALIPER_TYPES_FOR_CLASSES.get(self._classname, default)
-        self._set_str_prop('type', self._typename)
+        self._set_str_prop("type", self._typename)
 
     def _set_id(self, v):
         if self.type in ENTITY_TYPES.values():
             if not is_valid_URI(v):
-                raise ValueError('Entity ID must be a valid URI')
-            self._update_props('id', v, req=True)
+                raise ValueError("Entity ID must be a valid URI")
+            self._update_props("id", v, req=True)
         elif self.type in EVENT_TYPES.values():
             if v and not is_valid_UUID_URN(v):
-                raise ValueError('Event ID must be a valid UUID URN')
-            self._update_props('id', v or 'urn:uuid:{}'.format(uuid.uuid4()), req=True)
+                raise ValueError("Event ID must be a valid UUID URN")
+            self._update_props("id", v or "urn:uuid:{}".format(uuid.uuid4()), req=True)
         else:
-            raise ValueError('Caliper Serializable of undeterminable type: {}'.format(self.type))
+            raise ValueError(
+                "Caliper Serializable of undeterminable type: {}".format(self.type)
+            )
 
     def _set_datetime_prop(self, k, v, req=False):
         if v and not is_valid_datetime(v):
-            raise ValueError('{0} must be a valid date-time'.format(str(k)))
+            raise ValueError("{0} must be a valid date-time".format(str(k)))
         self._update_props(k, v, req=req)
 
     def _set_duration_prop(self, k, v, req=False):
         if v and not is_valid_duration(v):
-            raise ValueError('{0} must be a valid duration'.format(str(k)))
+            raise ValueError("{0} must be a valid duration".format(str(k)))
         self._update_props(k, v, req=req)
 
     def _set_list_prop(self, k, v, t=None, req=False):
         if v:
             if not (isinstance(v, MutableSequence)):
-                raise ValueError('{0} must be a list'.format(str(k)))
+                raise ValueError("{0} must be a list".format(str(k)))
             elif t:
                 if isinstance(t, MutableSequence):
                     fn = ensure_list_types
@@ -488,91 +521,113 @@ class CaliperSerializable(object):
 
     def _set_obj_prop(self, k, v, t=None, req=False):
         if isinstance(v, BaseEntity) and t and not (is_subtype(v.type, t)):
-            raise TypeError('Provided property is not of required type: {}'.format(t))
+            raise TypeError("Provided property is not of required type: {}".format(t))
         if isinstance(v, str) and not is_valid_URI(v):
-            raise ValueError('ID value for object property must be valid URI: {}'.format(v))
+            raise ValueError(
+                "ID value for object property must be valid URI: {}".format(v)
+            )
         if isinstance(v, str) and t and not (is_subtype(t, CaliperSerializable)):
-            raise ValueError('URI IDs can only be provided for objects of known Caliper types')
+            raise ValueError(
+                "URI IDs can only be provided for objects of known Caliper types"
+            )
         self._update_props(k, v, req=req)
 
     def _set_time_prop(self, k, v, req=False):
         if v and not is_valid_time(v):
-            raise ValueError('{0} must be a valid time'.format(str(k)))
+            raise ValueError("{0} must be a valid time".format(str(k)))
         self._update_props(k, v, req=req)
 
     def _set_uri_prop(self, k, v, req=False):
         if v and not is_valid_URI(v):
-            raise ValueError('{0} must be a valid URI'.format(str(k)))
+            raise ValueError("{0} must be a valid URI".format(str(k)))
         self._update_props(k, v, req=req)
 
     # protected unpacker methods, used by dict and json-string representation
     # public functions
-    def _unpack_list(self,
-                     l,
-                     known_contexts=set(),
-                     described_objects=[],
-                     thin_context=False,
-                     thin_props=False):
+    def _unpack_list(
+        self,
+        l,
+        known_contexts=set(),
+        described_objects=[],
+        thin_context=False,
+        thin_props=False,
+    ):
         r = []
         for item in l:
             if isinstance(item, MutableSequence):
                 r.append(
-                    self._unpack_list(item,
-                                      known_contexts=known_contexts,
-                                      described_objects=described_objects,
-                                      thin_context=thin_context,
-                                      thin_props=thin_props))
+                    self._unpack_list(
+                        item,
+                        known_contexts=known_contexts,
+                        described_objects=described_objects,
+                        thin_context=thin_context,
+                        thin_props=thin_props,
+                    )
+                )
             elif isinstance(item, CaliperSerializable):
                 r.append(
-                    item._unpack_object(known_contexts=known_contexts,
-                                        described_objects=described_objects,
-                                        thin_context=thin_context,
-                                        thin_props=thin_props))
+                    item._unpack_object(
+                        known_contexts=known_contexts,
+                        described_objects=described_objects,
+                        thin_context=thin_context,
+                        thin_props=thin_props,
+                    )
+                )
             else:
                 r.append(copy.deepcopy(item))
         return r
 
-    def _unpack_object(self,
-                       known_contexts=set(),
-                       described_objects=[],
-                       thin_context=False,
-                       thin_props=False):
+    def _unpack_object(
+        self,
+        known_contexts=set(),
+        described_objects=[],
+        thin_context=False,
+        thin_props=False,
+    ):
         r = {}
         kc = copy.deepcopy(known_contexts)
         # if this object's context is not already known, then we retain
         # the context, and we add its context hashes to the list of known contexts
         if self._context_hashes.context not in known_contexts:
-            r.update({'@context': self.context})
+            r.update({"@context": self.context})
             if thin_context:
                 kc.update(set(self._context_hashes))
 
         for k, v in sorted(self._props.items()):
-            if k == '@context':
+            if k == "@context":
                 continue
 
             # handle value based on its type: list, composite, or basic type
             if thin_props and v in (None, {}, []):
                 continue
             elif isinstance(v, MutableSequence):
-                value = self._unpack_list(v,
-                                          known_contexts=kc,
-                                          described_objects=described_objects,
-                                          thin_context=thin_context,
-                                          thin_props=thin_props)
+                value = self._unpack_list(
+                    v,
+                    known_contexts=kc,
+                    described_objects=described_objects,
+                    thin_context=thin_context,
+                    thin_props=thin_props,
+                )
             elif isinstance(v, CaliperSerializable):
-                the_id = v._get_prop('id')
-                the_type = v._get_prop('type')
-                if (the_id and the_type and is_subtype(the_type, CaliperSerializable)
-                        and the_id in described_objects):
+                the_id = v._get_prop("id")
+                the_type = v._get_prop("type")
+                if (
+                    the_id
+                    and the_type
+                    and is_subtype(the_type, CaliperSerializable)
+                    and the_id in described_objects
+                ):
                     value = the_id
                 else:
-                    value = v._unpack_object(known_contexts=kc,
-                                             described_objects=described_objects,
-                                             thin_context=thin_context,
-                                             thin_props=thin_props)
+                    value = v._unpack_object(
+                        known_contexts=kc,
+                        described_objects=described_objects,
+                        thin_context=thin_context,
+                        thin_props=thin_props,
+                    )
             elif isinstance(v, MutableMapping):
-                the_id = v.get('id')
-                the_type = v.get('type')
+                the_id = v.get("id")
+                the_type = v.get("type")
                 if (the_id and the_type) and (the_id in described_objects):
                     value = the_id
                 else:
@@ -585,65 +640,81 @@ class CaliperSerializable(object):
 
     # public methods, to repr this event or entity as a dict or as a json-string
     def as_dict(self, described_objects=None, thin_context=False, thin_props=False):
-        return self._unpack_object(described_objects=described_objects or [],
-                                   thin_context=thin_context,
-                                   thin_props=thin_props)
+        return self._unpack_object(
+            described_objects=described_objects or [],
+            thin_context=thin_context,
+            thin_props=thin_props,
+        )
 
     def as_json(self, described_objects=None, thin_context=False, thin_props=False):
-        r = self.as_dict(described_objects=described_objects,
-                         thin_context=thin_context,
-                         thin_props=thin_props)
+        r = self.as_dict(
+            described_objects=described_objects,
+            thin_context=thin_context,
+            thin_props=thin_props,
+        )
         return json.dumps(r, sort_keys=True)
 
-    def as_json_with_ids(self, described_objects=None, thin_context=False, thin_props=False):
-        ret = self.as_json(described_objects=described_objects,
-                           thin_context=thin_context,
-                           thin_props=thin_props)
-        return ret, re.findall(r'"id": "(.+?(?="))"', re.sub(r'"@context": \[.+?\],', '', ret))
+    def as_json_with_ids(
+        self, described_objects=None, thin_context=False, thin_props=False
+    ):
+        ret = self.as_json(
+            described_objects=described_objects,
+            thin_context=thin_context,
+            thin_props=thin_props,
+        )
+        return (
+            ret,
+            re.findall(r'"id": "(.+?(?="))"', re.sub(r'"@context": \[.+?\],', "", ret)),
+        )
 
 
 # Base classes for Caliper Entity and Event
 class BaseEntity(CaliperSerializable):
     def __init__(self, context=None, profile=None):
         CaliperSerializable.__init__(self)
-        self._set_type(default=CALIPER_TYPES['ENTITY'])
+        self._set_type(default=CALIPER_TYPES["ENTITY"])
         self._set_profile(profile, context, self.type)
         self._set_context(context, self.profile)
 
 
 class BaseEvent(CaliperSerializable):
-    def __init__(self,
-                 context=None,
-                 id=None,
-                 profile=None,
-                 action=None,
-                 eventTime=None,
-                 object=None):
+    def __init__(
+        self,
+        context=None,
+        id=None,
+        profile=None,
+        action=None,
+        eventTime=None,
+        object=None,
+    ):
         CaliperSerializable.__init__(self)
-        self._set_type(default=CALIPER_TYPES['EVENT'])
+        self._set_type(default=CALIPER_TYPES["EVENT"])
         self._set_profile(profile, context, self.type)
         self._set_context(context, self.profile)
         self._set_id(id)
 
         if action not in CALIPER_PROFILE_ACTIONS[self.profile][self.type]:
-            raise ValueError('invalid action for profile and event: {} for {}:{}'.format(
-                action, self.profile, self.type))
-        self._set_str_prop('action', action, req=True)
-        self._set_datetime_prop('eventTime', eventTime, req=True)
-        self._set_obj_prop('object', object, t=BaseEntity)
+            raise ValueError(
+                "invalid action for profile and event: {} for {}:{}".format(
+                    action, self.profile, self.type
+                )
+            )
+        self._set_str_prop("action", action, req=True)
+        self._set_datetime_prop("eventTime", eventTime, req=True)
+        self._set_obj_prop("object", object, t=BaseEntity)
 
     @property
     def id(self):
-        return self._get_prop('id')
+        return self._get_prop("id")
 
     @property
     def action(self):
-        return self._get_prop('action')
+        return self._get_prop("action")
 
     @property
     def eventTime(self):
-        return self._get_prop('eventTime')
+        return self._get_prop("eventTime")
 
     @property
     def object(self):
-        return self._get_prop('object')
+        return self._get_prop("object")

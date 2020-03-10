@@ -22,8 +22,10 @@ from math import sqrt
 
 
 class Statistic(object):
-    _count_string = '[Count: {0}]'
-    _stats_string = '[Count : {0}], [Min : {1}], [Max : {2}], [Average : {3}], [Std. Dev. : {4}]'
+    _count_string = "[Count: {0}]"
+    _stats_string = (
+        "[Count : {0}], [Min : {1}], [Max : {2}], [Average : {3}], [Std. Dev. : {4}]"
+    )
 
     def __init__(self):
         self._sum = 0.0
@@ -44,8 +46,9 @@ class Statistic(object):
         if self._min == 1.0 and self._max == 1.0:
             return self._count_string.format(self._count)
         else:
-            return self._stats_string.format(self._count, self._min, self._max, self.average,
-                                             self.standard_deviation)
+            return self._stats_string.format(
+                self._count, self._min, self._max, self.average, self.standard_deviation
+            )
 
     def clear(self):
         self._sum = 0.0
@@ -88,14 +91,14 @@ class Statistic(object):
         if self._count == 0:
             return 0.0
         else:
-            return (self._sum / self._count)
+            return self._sum / self._count
 
     @property
     def variance(self):
         if self._count < 1:
             return 1.0
         else:
-            return (self._newS / (self._count - 1))
+            return self._newS / (self._count - 1)
 
     @property
     def standard_deviation(self):
@@ -115,7 +118,7 @@ class Statistic(object):
 
 
 class BaseStatistics(object):
-    _keys = {'SUCCESSFUL': 'Successful', 'FAILED': 'Failed'}
+    _keys = {"SUCCESSFUL": "Successful", "FAILED": "Failed"}
 
     def __init__(self):
         self._map = {}
@@ -123,12 +126,14 @@ class BaseStatistics(object):
             self._map.update({self._keys[k]: Statistic()})
 
     def __str__(self):
-        r_top = '\n-------- Caliper Python Statistics --------\n'
-        r_bod = ''
-        r_bot = '-------------------------------------------\n'
+        r_top = "\n-------- Caliper Python Statistics --------\n"
+        r_bod = ""
+        r_bot = "-------------------------------------------\n"
         for k in self._keys:
-            r_bod += '{0} : {1}\n'.format(self._keys[k], self._map[self._keys[k]].__str__())
-        return '{0}{1}{2}'.format(r_top, r_bod, r_bot)
+            r_bod += "{0} : {1}\n".format(
+                self._keys[k], self._map[self._keys[k]].__str__()
+            )
+        return "{0}{1}{2}".format(r_top, r_bod, r_bot)
 
     def clear(self):
         for k in self._keys:
@@ -136,39 +141,39 @@ class BaseStatistics(object):
 
     @property
     def successful(self):
-        return self._map[self._keys['SUCCESSFUL']]
+        return self._map[self._keys["SUCCESSFUL"]]
 
     def update_successful(self, val):
-        self._map[self._keys['SUCCESSFUL']].update(val)
+        self._map[self._keys["SUCCESSFUL"]].update(val)
 
     @property
     def failed(self):
-        return self._map[self._keys['FAILED']]
+        return self._map[self._keys["FAILED"]]
 
     def update_failed(self, val):
-        self._map[self._keys['FAILED']].update(val)
+        self._map[self._keys["FAILED"]].update(val)
 
 
 class SimpleStatistics(BaseStatistics):
-    _keys = {'SENT': 'Sent', 'SUCCESSFUL': 'Successful', 'FAILED': 'Failed'}
+    _keys = {"SENT": "Sent", "SUCCESSFUL": "Successful", "FAILED": "Failed"}
 
     def __init__(self):
         BaseStatistics.__init__(self)
 
     @property
     def sent(self):
-        return self._map[self._keys['SENT']]
+        return self._map[self._keys["SENT"]]
 
     def update_sent(self, val):
-        self._map[self._keys['SENT']].update(val)
+        self._map[self._keys["SENT"]].update(val)
 
 
 class Statistics(BaseStatistics):
     _keys = {
-        'MEASURE': 'Measure',
-        'DESCRIBE': 'Describe',
-        'SUCCESSFUL': 'Successful',
-        'FAILED': 'Failed'
+        "MEASURE": "Measure",
+        "DESCRIBE": "Describe",
+        "SUCCESSFUL": "Successful",
+        "FAILED": "Failed",
     }
 
     def __init__(self):
@@ -176,14 +181,14 @@ class Statistics(BaseStatistics):
 
     @property
     def describes(self):
-        return self._map[self._keys['DESCRIBE']]
+        return self._map[self._keys["DESCRIBE"]]
 
     def update_describes(self, val):
-        self._map[self._keys['DESCRIBE']].update(val)
+        self._map[self._keys["DESCRIBE"]].update(val)
 
     @property
     def measures(self):
-        return self._map[self._keys['MEASURE']]
+        return self._map[self._keys["MEASURE"]]
 
     def update_measures(self, val):
-        self._map[self._keys['MEASURE']].update(val)
+        self._map[self._keys["MEASURE"]].update(val)

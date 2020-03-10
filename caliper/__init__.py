@@ -30,17 +30,18 @@ from caliper.base import HttpOptions
 from caliper.constants import CALIPER_VERSION
 from caliper.sensor import Sensor, SimpleSensor
 
-__title__ = 'IMSGlobal_Caliper'
-__version__ = '1.2.0.0'
+__title__ = "IMSGlobal_Caliper"
+__version__ = "1.2.0.0"
 __build__ = 0x01020000
-__author__ = 'IMS Global Learning Consortium, Inc.'
-__license__ = 'LGPLv3'
-__all__ = ['Sensor', 'SimpleSensor', 'HttpOptions', CALIPER_VERSION]
+__author__ = "IMS Global Learning Consortium, Inc."
+__license__ = "LGPLv3"
+__all__ = ["Sensor", "SimpleSensor", "HttpOptions", CALIPER_VERSION]
 
 
 def build_default_sensor(sensor_id=None):
     return Sensor.fashion_sensor_with_config(
-        config_options=HttpOptions(optimize_serialization=True), sensor_id=sensor_id)
+        config_options=HttpOptions(optimize_serialization=True), sensor_id=sensor_id
+    )
 
 
 def build_default_sensor_for_client(client=None, sensor_id=None):
@@ -48,10 +49,13 @@ def build_default_sensor_for_client(client=None, sensor_id=None):
 
 
 def build_sensor_from_config(config_options=None, sensor_id=None):
-    return Sensor.fashion_sensor_with_config(config_options=config_options
-                                             or HttpOptions(optimize_serialization=True),
-                                             sensor_id=sensor_id)
+    return Sensor.fashion_sensor_with_config(
+        config_options=config_options or HttpOptions(optimize_serialization=True),
+        sensor_id=sensor_id,
+    )
 
 
 def build_simple_sensor(config_options=None, sensor_id=None):
-    return SimpleSensor.fashion_simple_sensor(config_options=config_options, sensor_id=sensor_id)
+    return SimpleSensor.fashion_simple_sensor(
+        config_options=config_options, sensor_id=sensor_id
+    )

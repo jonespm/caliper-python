@@ -97,6 +97,9 @@ Global Learning Consortium (for example, for feature requests, bug reports, ques
 but we do not accept contributions in the form of pull requests from non-members. See
 `CONTRIBUTING.md` for more information.
 
+The project uses Black, and its configuration in a `pyproject.toml` file as the canonical way to
+format the code; code contributions should keep in line with this.
+
 **Testing**. When you work with the source bundle, we include tests in the `tests` directory. In
 general, whenever you might make changes to code in `caliper`, you should run the fixture tests.
 From the source repo's top-level directory, use `tox` to run all the tests on Python 3.7, 3.8

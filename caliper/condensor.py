@@ -24,30 +24,44 @@ import importlib
 from collections.abc import MutableSequence, MutableMapping
 
 from caliper.base import is_valid_context, is_valid_datetime, is_valid_URI
-from caliper.constants import CALIPER_CLASSES, CALIPER_CORE_CONTEXT, CALIPER_TYPES, EVENT_TYPES
+from caliper.constants import (
+    CALIPER_CLASSES,
+    CALIPER_CORE_CONTEXT,
+    CALIPER_TYPES,
+    EVENT_TYPES,
+)
 
 
 def from_caliper_envelope(d, strict=False):
     r = None
-    if (is_valid_URI(d.get('sensor')) and is_valid_datetime(d.get('sendTime'))
-            and isinstance(d.get('data'), MutableSequence)):
-        r = from_json_list(d.get('data'), strict=strict)
+    if (
+        is_valid_URI(d.get("sensor"))
+        and is_valid_datetime(d.get("sendTime"))
+        and isinstance(d.get("data"), MutableSequence)
+    ):
+        r = from_json_list(d.get("data"), strict=strict)
     return r
 
 
 def from_json_dict(d, strict=False):
-    ctxt = d.get('@context')
-    id = d.get('id')
-    typ = d.get('type')
+    ctxt = d.get("@context")
+    id = d.get("id")
+    typ = d.get("type")
 
     if strict and not is_valid_context(ctxt, CALIPER_CORE_CONTEXT):
-        raise ValueError('While strictly parsing, encountered unknown context: {}'.format(ctxt))
+        raise ValueError(
+            "While strictly parsing, encountered unknown context: {}".format(ctxt)
+        )
     else:
         ctxt = ctxt or CALIPER_CORE_CONTEXT
     if strict and typ not in CALIPER_TYPES.values():
-        raise ValueError('While strictly parsing, encountered unknown type: {}'.format(typ))
+        raise ValueError(
+            "While strictly parsing, encountered unknown type: {}".format(typ)
+        )
     if strict and typ in EVENT_TYPES.values() and not id:
-        raise ValueError('While strictly parsing, encountered event with no id: {}'.format(typ))
+        raise ValueError(
+            "While strictly parsing, encountered event with no id: {}".format(typ)
+        )
 
     if typ and not CALIPER_CLASSES.get(typ):
         return copy.deepcopy(d)
@@ -57,32 +71,32 @@ def from_json_dict(d, strict=False):
     for k, v in d.items():
 
         # transmogrify key or move to next item
-        if k in ['type']:
+        if k in ["type"]:
             continue
-        elif k in ['@context']:
-            key = 'context'
+        elif k in ["@context"]:
+            key = "context"
         else:
             key = k
 
         # recursively condense value if complex, otherwise use value
-        if CALIPER_CLASSES.get(typ) and k in ['extensions']:
+        if CALIPER_CLASSES.get(typ) and k in ["extensions"]:
             value = v
-        elif k in ['@context']:
+        elif k in ["@context"]:
             value = v
         elif isinstance(v, MutableSequence):
             value = from_json_list(v)
-        elif isinstance(v, MutableMapping) and CALIPER_CLASSES.get(v.get('type')):
+        elif isinstance(v, MutableMapping) and CALIPER_CLASSES.get(v.get("type")):
             value = from_json_dict(v)
         else:
             value = v
 
         r.update({key: value})
 
-    if '.' not in type_path:
-        m = 'builtins'
+    if "." not in type_path:
+        m = "builtins"
         c = type_path
     else:
-        m, c = type_path.rsplit('.', 1)
+        m, c = type_path.rsplit(".", 1)
 
     TheClass = getattr(importlib.import_module(m), c)
 

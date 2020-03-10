@@ -25,7 +25,7 @@ from . import util
 
 class TestCaliperEntities(unittest.TestCase):
     def setUp(self):
-        self.fixtures = util.get_fixtures_of_type('entity')
+        self.fixtures = util.get_fixtures_of_type("entity")
 
     def tearDown(self):
         pass
@@ -33,19 +33,21 @@ class TestCaliperEntities(unittest.TestCase):
     def testAllCaliperEntities(self):
         passing = True
         for fixture in self.fixtures:
-            print('Testing entity fixture: {}'.format(fixture))
+            print("Testing entity fixture: {}".format(fixture))
             try:
-                self.assertEqual(util.get_fixture(fixture), util.rebuild_entity(fixture))
+                self.assertEqual(
+                    util.get_fixture(fixture), util.rebuild_entity(fixture)
+                )
             except AssertionError:
                 passing = False
-                print('Unable to rebuild matching entity fixture: {}'.format(fixture))
+                print("Unable to rebuild matching entity fixture: {}".format(fixture))
         if not passing:
             raise AssertionError
 
 
 class TestBrokenCaliperEntities(unittest.TestCase):
     def setUp(self):
-        self.fixtures = util.get_fixtures_of_type('entity', broken=True)
+        self.fixtures = util.get_fixtures_of_type("entity", broken=True)
 
     def tearDown(self):
         pass
@@ -53,20 +55,26 @@ class TestBrokenCaliperEntities(unittest.TestCase):
     def testAllBrokenCaliperEntities(self):
         broken = passing = True
         for fixture in self.fixtures:
-            print('Testing broken entity fixture: {}'.format(fixture))
+            print("Testing broken entity fixture: {}".format(fixture))
             try:
-                self.assertNotEqual(util.get_fixture(fixture, broken),
-                                    util.rebuild_entity(fixture, broken))
+                self.assertNotEqual(
+                    util.get_fixture(fixture, broken),
+                    util.rebuild_entity(fixture, broken),
+                )
             except AssertionError:
                 passing = False
-                print('Broken entity fixture should not be rebuildable: {}'.format(fixture))
+                print(
+                    "Broken entity fixture should not be rebuildable: {}".format(
+                        fixture
+                    )
+                )
         if not passing:
             raise AssertionError
 
 
 class TestCaliperEnvelopes(unittest.TestCase):
     def setUp(self):
-        self.fixtures = util.get_fixtures_of_type('envelope')
+        self.fixtures = util.get_fixtures_of_type("envelope")
 
     def tearDown(self):
         pass
@@ -74,19 +82,21 @@ class TestCaliperEnvelopes(unittest.TestCase):
     def testAllCaliperEnvelopes(self):
         passing = True
         for fixture in self.fixtures:
-            print('Testing envelope fixture: {}'.format(fixture))
+            print("Testing envelope fixture: {}".format(fixture))
             try:
-                self.assertEqual(util.get_fixture(fixture), util.rebuild_envelope(fixture))
+                self.assertEqual(
+                    util.get_fixture(fixture), util.rebuild_envelope(fixture)
+                )
             except AssertionError:
                 passing = False
-                print('Unable to rebuild matching envelope fixture: {}'.format(fixture))
+                print("Unable to rebuild matching envelope fixture: {}".format(fixture))
         if not passing:
             raise AssertionError
 
 
 class TestBrokenCaliperEnvelopes(unittest.TestCase):
     def setUp(self):
-        self.fixtures = util.get_fixtures_of_type('envelope', broken=True)
+        self.fixtures = util.get_fixtures_of_type("envelope", broken=True)
 
     def tearDown(self):
         pass
@@ -94,20 +104,26 @@ class TestBrokenCaliperEnvelopes(unittest.TestCase):
     def testAllCaliperEnvelopes(self):
         broken = passing = True
         for fixture in self.fixtures:
-            print('Testing envelope fixture: {}'.format(fixture))
+            print("Testing envelope fixture: {}".format(fixture))
             try:
-                self.assertNotEqual(util.get_fixture(fixture, broken),
-                                    util.rebuild_entity(fixture, broken))
+                self.assertNotEqual(
+                    util.get_fixture(fixture, broken),
+                    util.rebuild_entity(fixture, broken),
+                )
             except AssertionError:
                 passing = False
-                print('Broken envelope fixture should not be rebuildable: {}'.format(fixture))
+                print(
+                    "Broken envelope fixture should not be rebuildable: {}".format(
+                        fixture
+                    )
+                )
         if not passing:
             raise AssertionError
 
 
 class TestCaliperEvents(unittest.TestCase):
     def setUp(self):
-        self.fixtures = util.get_fixtures_of_type('event')
+        self.fixtures = util.get_fixtures_of_type("event")
 
     def tearDown(self):
         pass
@@ -115,19 +131,19 @@ class TestCaliperEvents(unittest.TestCase):
     def testAllCaliperEvents(self):
         passing = True
         for fixture in self.fixtures:
-            print('Testing event fixture: {}'.format(fixture))
+            print("Testing event fixture: {}".format(fixture))
             try:
                 self.assertEqual(util.get_fixture(fixture), util.rebuild_event(fixture))
             except AssertionError:
                 passing = False
-                print('Unable to rebuild matching event fixture: {}'.format(fixture))
+                print("Unable to rebuild matching event fixture: {}".format(fixture))
         if not passing:
             raise AssertionError
 
 
 class TestBrokenCaliperEvents(unittest.TestCase):
     def setUp(self):
-        self.fixtures = util.get_fixtures_of_type('event', broken=True)
+        self.fixtures = util.get_fixtures_of_type("event", broken=True)
 
     def tearDown(self):
         pass
@@ -135,12 +151,16 @@ class TestBrokenCaliperEvents(unittest.TestCase):
     def testAllBrokenCaliperEvents(self):
         broken = passing = True
         for fixture in self.fixtures:
-            print('Testing broken event fixture: {}'.format(fixture))
+            print("Testing broken event fixture: {}".format(fixture))
             try:
-                self.assertNotEqual(util.get_fixture(fixture, broken),
-                                    util.rebuild_entity(fixture, broken))
+                self.assertNotEqual(
+                    util.get_fixture(fixture, broken),
+                    util.rebuild_entity(fixture, broken),
+                )
             except AssertionError:
                 passing = False
-                print('Broken event fixture should not be rebuildable: {}'.format(fixture))
+                print(
+                    "Broken event fixture should not be rebuildable: {}".format(fixture)
+                )
         if not passing:
             raise AssertionError
