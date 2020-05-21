@@ -701,7 +701,7 @@ class BaseEvent(CaliperSerializable):
             )
         self._set_str_prop("action", action, req=True)
         self._set_datetime_prop("eventTime", eventTime, req=True)
-        self._set_obj_prop("object", object, t=BaseEntity)
+        self._set_obj_prop("object", object, t=BaseEntity, req=True)
 
     @property
     def id(self):
