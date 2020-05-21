@@ -146,10 +146,8 @@ class Membership(Entity):
         self, member=None, organization=None, roles=None, status=None, **kwargs
     ):
         Entity.__init__(self, **kwargs)
-        self._set_obj_prop("member", member, t=ENTITY_TYPES["AGENT"], req=True)
-        self._set_obj_prop(
-            "organization", organization, t=ENTITY_TYPES["ORGANIZATION"], req=True
-        )
+        self._set_obj_prop("member", member, t=ENTITY_TYPES["AGENT"])
+        self._set_obj_prop("organization", organization, t=ENTITY_TYPES["ORGANIZATION"])
 
         if roles and isinstance(roles, MutableSequence):
             if set(roles).issubset(set(CALIPER_ROLES.values())):
@@ -161,10 +159,10 @@ class Membership(Entity):
         else:
             self._set_list_prop("roles", None)
 
-        if status not in CALIPER_STATUS.values():
+        if status and status not in CALIPER_STATUS.values():
             raise ValueError("status must be in the list of valid Status values")
         else:
-            self._set_str_prop("status", status, req=True)
+            self._set_str_prop("status", status)
 
     @property
     def member(self):
@@ -296,7 +294,7 @@ class AggregateMeasure(Entity):
         if metric not in CALIPER_METRICS.values():
             raise ValueError("metric must be in the list of valid Metric values")
         else:
-            self._set_str_prop("metric", metric)
+            self._set_str_prop("metric", metric, req=True)
 
     @property
     def endedAtTime(self):
@@ -475,10 +473,8 @@ class EpubVolume(DigitalResource):
 class Annotation(Entity):
     def __init__(self, annotated=None, annotator=None, **kwargs):
         Entity.__init__(self, **kwargs)
-        self._set_obj_prop(
-            "annotated", annotated, t=ENTITY_TYPES["DIGITAL_RESOURCE"], req=True
-        )
-        self._set_obj_prop("annotator", annotator, t=ENTITY_TYPES["PERSON"], req=True)
+        self._set_obj_prop("annotated", annotated, t=ENTITY_TYPES["DIGITAL_RESOURCE"])
+        self._set_obj_prop("annotator", annotator, t=ENTITY_TYPES["PERSON"])
 
     @property
     def annotated(self):
@@ -1229,7 +1225,7 @@ class Result(Entity):
         **kwargs
     ):
         Entity.__init__(self, **kwargs)
-        self._set_obj_prop("attempt", attempt, t=ENTITY_TYPES["ATTEMPT"], req=True)
+        self._set_obj_prop("attempt", attempt, t=ENTITY_TYPES["ATTEMPT"])
         self._set_str_prop("comment", comment)
         self._set_float_prop("maxResultScore", maxResultScore)
         self._set_float_prop("resultScore", resultScore)
@@ -1267,7 +1263,7 @@ class Score(Entity):
         **kwargs
     ):
         Entity.__init__(self, **kwargs)
-        self._set_obj_prop("attempt", attempt, t=ENTITY_TYPES["ATTEMPT"], req=True)
+        self._set_obj_prop("attempt", attempt, t=ENTITY_TYPES["ATTEMPT"])
         self._set_str_prop("comment", comment)
         self._set_float_prop("maxScore", maxScore)
         self._set_float_prop("scoreGiven", scoreGiven)
