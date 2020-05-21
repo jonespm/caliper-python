@@ -180,20 +180,20 @@ def is_valid_UUID_URN(uri):
 
 
 # type validation functions
-def ensure_list_type(l, t):
+def ensure_list_type(lst, t):
     # exception or True
-    for i in l:
+    for i in lst:
         ensure_type(i, t)
     return True
 
 
-def ensure_list_types(l, tl):
+def ensure_list_types(lst, tlist):
     # exception or True
     messages = []
     ret = False
-    for t in tl:
+    for t in tlist:
         try:
-            ensure_list_type(l, t)
+            ensure_list_type(lst, t)
             ret = True
         except Exception as e:
             messages.append(str(e))
@@ -546,14 +546,14 @@ class CaliperSerializable(object):
     # public functions
     def _unpack_list(
         self,
-        l,
+        lst,
         known_contexts=set(),
         described_objects=[],
         thin_context=False,
         thin_props=False,
     ):
         r = []
-        for item in l:
+        for item in lst:
             if isinstance(item, MutableSequence):
                 r.append(
                     self._unpack_list(

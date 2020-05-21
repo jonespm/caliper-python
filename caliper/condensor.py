@@ -103,9 +103,9 @@ def from_json_dict(d, strict=False):
     return TheClass(**r)
 
 
-def from_json_list(l, strict=False):
+def from_json_list(lst, strict=False):
     r = []
-    for item in l:
+    for item in lst:
         if isinstance(item, MutableSequence):
             r.append(from_json_list(item, strict=strict))
         elif isinstance(item, MutableMapping):
