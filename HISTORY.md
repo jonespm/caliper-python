@@ -2,6 +2,13 @@
 
 ## 1.2.0
 
+- Revise Entities and Events to align with 1.2 final spec draft.
+
+  *1.2.0.1*. Small code refactor to get Flake8 tests to run clean,
+             Align Caliper Entity property required status to align with 1.2 final spec draft,
+             Caliper Event.Object property explicitly required
+
+
 - Supports IMS Caliper specification 1.2.
 
 - Add support for user-agent type information within SoftwareApplication entities, and add new
