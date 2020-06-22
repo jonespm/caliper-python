@@ -4,6 +4,9 @@
 
 - Revise Entities and Events to align with 1.2 final spec draft.
 
+  *1.2.0.2*. Addition of other valid LTI Message types to the explicit list of valid messages:
+             legacy 1.0/1.1 LTI basic launch; legacy Content Item/Deep Linking 1.0 messages
+
   *1.2.0.1*. Small code refactor to get Flake8 tests to run clean,
              Align Caliper Entity property required status to align with 1.2 final spec draft,
              Caliper Event.Object property explicitly required

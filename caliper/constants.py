@@ -164,6 +164,11 @@ CALIPER_TYPES_FOR_CLASSES = {
 ## Caliper LTI, Metrics, Roles and Status vocabulary
 
 CALIPER_LTI_MESSAGES = {
+
+    "BASIC_LTI_LAUNCH_REQUEST": "basic-lti-launch-request",
+    "CONTENT_ITEM_SELECTION_REQUEST": "ContentItemSelectionRequest",
+    "CONTENT_ITEM_SELECTION_RESPONSE": "ContentItemSelection",
+    "CONTENT_ITEM_UPDATE_REQUEST": "ContentItemUpdateRequest",
     "RESOURCE_LINK_REQUEST": "LtiResourceLinkRequest",
     "DEEP_LINKING_REQUEST": "LtiDeepLinkingRequest",
     "DEEP_LINKING_RESPONSE": "LtiDeepLinkingResponse",
