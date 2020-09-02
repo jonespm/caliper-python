@@ -4,6 +4,8 @@
 
 - Revise Entities and Events to align with 1.2 final spec draft.
 
+  *1.2.0.3*. Bug fixes with [PR #220](https://github.com/IMSGlobal/caliper-python/pull/220).
+
   *1.2.0.2*. Addition of other valid LTI Message types to the explicit list of valid messages:
              legacy 1.0/1.1 LTI basic launch; legacy Content Item/Deep Linking 1.0 messages
 
