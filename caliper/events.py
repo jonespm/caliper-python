@@ -345,4 +345,3 @@ class ViewEvent(Event):
             )
         else:
             ensure_type(self.object, ENTITY_TYPES["DIGITAL_RESOURCE"])
-            ensure_type(self.target, ENTITY_TYPES["FRAME"], optional=True)

@@ -263,9 +263,8 @@ class CourseSection(CourseOffering):
 
 
 class Group(Organization):
-    def __init__(self, members=None, **kwargs):
+    def __init__(self, **kwargs):
         Organization.__init__(self, **kwargs)
-        self._set_list_prop("members", members, t=ENTITY_TYPES["PERSON"])
 
 
 # Learning objective
