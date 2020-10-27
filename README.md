@@ -45,7 +45,7 @@ the package code itself:
 We developed `imsglobal_caliper` primarily using the Python 3.8+ platform (we no longer directly
 support the Python 2 platform). Changes to the code base should ensure the tests run clean under
 Python 3.5-8 and PyPy3. Currently, merges into the ongoing `imsglobal_caliper` work get tested in
-Travis-CI (xenial-based build environment) against Python versions 3.5-8, and PyPy3.
+Travis-CI (xenial-based build environment) against Python versions 3.5-9, and PyPy3.
 
 
 ## Build and install

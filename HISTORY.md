@@ -4,6 +4,8 @@
 
 - Revise Entities and Events to align with 1.2 final spec draft.
 
+  *1.2.0.4*. Add test support for Python 3.9.
+
   *1.2.0.3*. Bug fixes with [PR #220](https://github.com/IMSGlobal/caliper-python/pull/220).
 
   *1.2.0.2*. Addition of other valid LTI Message types to the explicit list of valid messages:
