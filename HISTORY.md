@@ -4,6 +4,9 @@
 
 - Revise Entities and Events to align with 1.2 final spec draft.
 
+  *1.2.0.6*. Update toolchain: add support for Python 3.10 in test; use Python 3.9 as default
+             version for build and test.
+
   *1.2.0.5*. Bug fix for [Issue #222](https://github.com/IMSGlobal/caliper-python/issues/222).
 
   *1.2.0.4*. Add test support for Python 3.9.

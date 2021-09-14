@@ -42,10 +42,10 @@ the package code itself:
 
 ### Which platform
 
-We developed `imsglobal_caliper` primarily using the Python 3.8+ platform (we no longer directly
+We developed `imsglobal_caliper` primarily using the Python 3.9+ platform (we no longer directly
 support the Python 2 platform). Changes to the code base should ensure the tests run clean under
-Python 3.7-9 and PyPy3. Currently, merges into the ongoing `imsglobal_caliper` work get tested in
-Travis-CI (xenial-based build environment) against Python versions 3.7-9, and PyPy3.
+Python 3.7-10 and PyPy3. Currently, merges into the ongoing `imsglobal_caliper` work get tested in
+Travis-CI (xenial-based build environment) against Python versions 3.7-10, and PyPy3.
 
 
 ## Build and install
@@ -103,7 +103,7 @@ format the code; code contributions should keep in line with this.
 **Testing**. When you work with the source bundle, we include tests in the `tests` directory. In
 general, whenever you might make changes to code in `caliper`, you should run the fixture tests.
 From the source repo's top-level directory, use `tox` to run all the tests on Python 3.7, 3.8, 3.9,
-and PyPy3.
+3.10, and PyPy3.
 
 Before you can run the tests, you will also need a copy of the Caliper fixtures (see below).
 
