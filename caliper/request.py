@@ -157,7 +157,8 @@ class EventStoreRequestor(object):
         raise NotImplementedError("Instance must implement EventStoreRequester.send()")
 
     def _get_time(self):
-        return datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
+        time = datetime.datetime.now(datetime.timezone.utc)
+        return time.isoformat(timespec='milliseconds').replace("+00:00", "Z")
 
     def _generate_payload(
         self,

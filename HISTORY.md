@@ -4,6 +4,10 @@
 
 - Revise Entities and Events to align with 1.2 final spec draft.
 
+  *1.2.0.9*. Addresses [Issue #233](https://github.com/IMSGlobal/caliper-python/issues/233).
+             Instead of using `utcnow()` as a fallback when generating event timestamps, start with
+             a timezone-aware datetime in UTC, and then use `isoformat()` instead of `srftime()`.
+
   *1.2.0.8*. Bug fix for [Issue #231](https://github.com/IMSGlobal/caliper-python/issues/231).
 
   *1.2.0.7*. Bug fix for [Issue #229](https://github.com/IMSGlobal/caliper-python/issues/229).
